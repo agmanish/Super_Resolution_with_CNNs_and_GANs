@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from torchvision.models.vgg import vgg16
-from skimage.measure import compare_psnr, compare_ssim
+from skimage.metrics import peak_signal_noise_ratio,structural_similarity
 import pytorch_ssim
 from torch.autograd import Variable
 
@@ -59,7 +59,7 @@ class GeneratorLoss_ssim(nn.Module):
 #         #print(type(label_batch[0]))
 #         ssim_loss = 0
 #         for i in range(N):
-#             ssim_loss += compare_ssim(label_batch[i],out_batch[i], win_size=3, multichannel=True)
+#             ssim_loss += structural_similarity(label_batch[i],out_batch[i], win_size=3, multichannel=True)
 #         ssim_loss /= N
 #         #print("get ssim_loss  ------")
         return image_loss + 0.001 * adversarial_loss + 0.006 * perception_loss - 1e-6 * ssim_loss

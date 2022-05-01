@@ -8,7 +8,7 @@ import math
 
 import pytorch_ssim as ps
 from torch.autograd import Variable
-from skimage.measure import compare_psnr, compare_ssim
+from skimage.metrics import peak_signal_noise_ratio,structural_similarity
 
 
 class Generator(nn.Module):
@@ -128,7 +128,7 @@ def psnr(outputs, labels):
     N, _, _, _ = outputs.shape
     psnr = 0
     for i in range(N):
-        psnr += compare_psnr(labels[i],outputs[i])
+        psnr += peak_signal_noise_ratio(labels[i],outputs[i])
     return psnr / N
 
 def ssim(outputs, labels) :
@@ -136,7 +136,7 @@ def ssim(outputs, labels) :
     ssim = 0
     for i in range(N):
         
-        ssim += compare_ssim(labels[i],outputs[i], win_size=3, multichannel=True)
+        ssim += structural_similarity(labels[i],outputs[i], win_size=3, multichannel=True)
     return ssim / N
     
 
