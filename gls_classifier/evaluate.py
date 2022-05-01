@@ -41,7 +41,7 @@ def evaluate(model, loss_fn, dataloader, metrics, params):
         #print('loop')
         # move to GPU if available
         if params.cuda:
-            data_batch, labels_batch = data_batch.cuda(async=True), labels_batch.cuda(async=True)
+            data_batch, labels_batch = data_batch.cuda(non_blocking=True), labels_batch.cuda(non_blocking=True)
         # fetch the next evaluation batch
         data_batch, labels_batch = Variable(data_batch), Variable(labels_batch)
         

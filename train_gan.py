@@ -72,7 +72,7 @@ def train(netG, netD, optimG, optimD, loss_fn, dataloader, metrics, params, cuda
         for i, (train_batch, labels_batch) in enumerate(dataloader):
             # move to GPU if available
             if params.cuda:
-                train_batch, labels_batch = train_batch.cuda(cuda_id, async=True), labels_batch.cuda(cuda_id, async=True)
+                train_batch, labels_batch = train_batch.cuda(cuda_id, non_blocking=True), labels_batch.cuda(cuda_id, non_blocking=True)
             # convert to torch Variables
             train_batch, labels_batch = Variable(train_batch), Variable(labels_batch)
 
