@@ -65,7 +65,6 @@ class FACESDataset(Dataset):
         
         # At this step everything is ok
         label_image = Image.open(self.filenames[idx])  # PIL image, label
-        print(label_image.getbands())
         train_image = Image.open(self.blur_filenames[idx])  # train
             
         label_image = self.transform(label_image)  # label
