@@ -141,6 +141,11 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
     for epoch in range(params.num_epochs):
         # Run one epoch
 #         scheduler.step()
+        git_config1=os.system("git config --global user.email 'agmanish001@gmail.com'" )
+        git_config2=os.system('git config --global user.name "agmanish"')
+        git_add=os.system('git add -A')
+        git_commit=os.system('git commit -m "SRCNN trained model."')
+        git_push=os.system('git push')
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
 
         # compute number of batches in one epoch (one full pass over the training set)
