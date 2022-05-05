@@ -63,6 +63,15 @@ class Generator(nn.Module):
         out = torch.clamp_(out, 0.0, 1.0)
 
         return out
+    
+    def _initialize_weights(self) -> None:
+        for module in self.modules():
+            if isinstance(module, nn.Conv2d):
+                nn.init.kaiming_normal_(module.weight)
+                if module.bias is not None:
+                    nn.init.constant_(module.bias, 0)
+            elif isinstance(module, nn.BatchNorm2d):
+                nn.init.constant_(module.weight, 1)
 
 
 class Discriminator(nn.Module):
