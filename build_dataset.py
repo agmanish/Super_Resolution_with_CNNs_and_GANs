@@ -24,9 +24,9 @@ parser.add_argument('--up_scale', default='4', help="Where to write the new data
 def crop_and_save(filename, output_dir, out_size):
     """crop the image contained in `filename` and save it to the `output_dir`"""
     image = io.imread(filename)
-    vert_start = (218 - out_size) // 2
+    vert_start = (200 - out_size) // 2
     vert_end = vert_start + out_size
-    horiz_start = (178 - out_size) // 2
+    horiz_start = (200 - out_size) // 2
     horiz_end = horiz_start + out_size
     cropped = image[vert_start:vert_end, horiz_start:horiz_end] # 218*178 -> 144*144
     io.imsave(os.path.join(output_dir, filename.split('/')[-1]), cropped)
@@ -34,9 +34,9 @@ def crop_and_save(filename, output_dir, out_size):
 def blur_and_save(filename, output_dir, in_size, out_size, up_scale):
     """Blur the image contained in `filename` and save it to the `output_dir`"""
     image = io.imread(filename)
-    vert_start = (218 - out_size) // 2
+    vert_start = (200 - out_size) // 2
     vert_end = vert_start + out_size
-    horiz_start = (178 - out_size) // 2
+    horiz_start = (200 - out_size) // 2
     horiz_end = horiz_start + out_size
     
     cropped = image[vert_start:vert_end, horiz_start:horiz_end] # 218*178 -> 144*144    
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     filenames.sort()
     random.shuffle(filenames)
 
-    split1 = int(0.98 * len(filenames))
+    split1 = int(0.9 * len(filenames))
     split2 = (len(filenames) - split1) // 2 + split1
     train_filenames = filenames[:split1]
     val_filenames = filenames[split1:split2]
