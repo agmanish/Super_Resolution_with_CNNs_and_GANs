@@ -1382,3 +1382,7 @@
 2018-05-30 22:41:30,638:INFO: Epoch 50/50
 2018-05-30 22:59:54,734:INFO: - Train metrics: PSNR: 26.815 ; SSIM: 0.926 ; g_loss: 0.004 ; d_loss: 1.000 ; mse_loss: 150.675
 2018-05-30 23:00:00,603:INFO: - Eval metrics : PSNR: 26.620 ; SSIM: 0.922 ; mse_loss: 157.696
+2022-05-05 21:13:43,067:INFO: Loading the datasets...
+2022-05-05 21:13:43,102:INFO: - done.
+2022-05-05 21:13:51,631:INFO: Starting training for 50 epoch(s)
+2022-05-05 21:13:51,632:INFO: Epoch 1/50
