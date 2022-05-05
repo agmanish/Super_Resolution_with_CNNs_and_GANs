@@ -139,24 +139,13 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
     logger = Logger('./logs')
     scheduler = lr_scheduler.StepLR(optimizer, step_size = 10, gamma=1)
     
-    PATH_OF_GIT_REPO = os.getcwd()  # make sure .git folder is properly configured
-    COMMIT_MESSAGE = 'srcnn_git'
-
-    def git_push():
-        try:
-            repo = Repo(PATH_OF_GIT_REPO)
-            repo.git.add(update=True)
-            repo.index.commit(COMMIT_MESSAGE)
-            origin = repo.remote(name='origin')
-            origin.push()
-        except:
-            print('Some error occured while pushing the code')    
+      
 
     
     for epoch in range(params.num_epochs):
         # Run one epoch
 #         scheduler.step()
-        git_push()
+        
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
 
         # compute number of batches in one epoch (one full pass over the training set)
