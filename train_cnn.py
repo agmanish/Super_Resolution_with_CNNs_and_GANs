@@ -9,6 +9,7 @@ import torch
 import torch.optim as optim
 from torch.autograd import Variable
 from tqdm import tqdm
+from git import Repo
 
 import utils
 from torch.nn.utils import clip_grad_norm
@@ -137,16 +138,13 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
     '''
     logger = Logger('./logs')
     scheduler = lr_scheduler.StepLR(optimizer, step_size = 10, gamma=1)
+    repo = git.Repo(.)
 
     for epoch in range(params.num_epochs):
         # Run one epoch
 #         scheduler.step()
-        git_config1=os.system("git config --global user.email 'agmanish001@gmail.com'" )
-        git_config2=os.system("git config --global user.name 'agmanish'")
-        git_add=os.system('git add -A')
-        git_commit=os.system('git commit -m "SRCNN trained model."')
-        git_push=os.system('git push')
-        
+        repo.git.add(all=True)
+        repo.git.commit("Srcnn_training")
         logging.info("Epoch {}/{}".format(epoch + 1, params.num_epochs))
 
         # compute number of batches in one epoch (one full pass over the training set)
