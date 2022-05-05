@@ -115,7 +115,7 @@ class Discriminator(nn.Module):
 class ResidualBlock(nn.Module):
     def __init__(self, channels):
        super(ResidualConvBlock, self).__init__()
-        self.rcb = nn.Sequential(
+       self.rcb = nn.Sequential(
             nn.Conv2d(channels, channels, (3, 3), (1, 1), (1, 1), bias=False),
             nn.BatchNorm2d(channels),
             nn.PReLU(),
