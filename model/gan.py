@@ -8,158 +8,127 @@ import math
 
 import pytorch_ssim as ps
 from torch.autograd import Variable
-from skimage.metrics import peak_signal_noise_ratio,structural_similarity
-
-from torchvision import transforms
-from torchvision.models.feature_extraction import create_feature_extractor
+from skimage.measure import compare_psnr, compare_ssim
 
 
 class Generator(nn.Module):
-    def __init__(self, scale_factor) -> None:
+    def __init__(self, scale_factor):
         upsample_block_num = int(math.log(scale_factor, 2))
+
         super(Generator, self).__init__()
-        # First conv layer.
-        self.conv_block1 = nn.Sequential(
-            nn.Conv2d(3, 64, (9, 9), (1, 1), (4, 4)),
-            nn.PReLU(),
+        self.block1 = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=9, padding=4),
+            nn.PReLU()
         )
-
-        # Features trunk blocks.
-        trunk = []
-        for _ in range(upsample_block_num):
-            trunk.append(ResidualConvBlock(64))
-        self.trunk = nn.Sequential(*trunk)
-
-        # Second conv layer.
-        self.conv_block2 = nn.Sequential(
-            nn.Conv2d(64, 64, (3, 3), (1, 1), (1, 1), bias=False),
-            nn.BatchNorm2d(64),
+        self.block2 = ResidualBlock(64)
+        self.block3 = ResidualBlock(64)
+        self.block4 = ResidualBlock(64)
+        self.block5 = ResidualBlock(64)
+        self.block6 = ResidualBlock(64)
+        self.block7 = nn.Sequential(
+            nn.Conv2d(64, 64, kernel_size=3, padding=1),
+            nn.PReLU()
         )
+        block8 = [UpsampleBLock(64, 2) for _ in range(upsample_block_num)]
+        block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
+        self.block8 = nn.Sequential(*block8)
 
-        # Upscale block
-        upsampling = []
-        for _ in range(2):
-            upsampling.append(UpsampleBlock(64))
-        self.upsampling = nn.Sequential(*upsampling)
+    def forward(self, x):
+        block1 = self.block1(x)
+        block2 = self.block2(block1)
+        block3 = self.block3(block2)
+        block4 = self.block4(block3)
+        block5 = self.block5(block4)
+        block6 = self.block6(block5)
+        block7 = self.block7(block6)
+        block8 = self.block8(block1 + block7)
 
-        # Output layer.
-        self.conv_block3 = nn.Conv2d(64, 3, (9, 9), (1, 1), (4, 4))
-
-        # Initialize neural network weights
-        self._initialize_weights()
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self._forward_impl(x)
-
-    # Support torch.script function
-    def _forward_impl(self, x: torch.Tensor) -> torch.Tensor:
-        out1 = self.conv_block1(x)
-        out = self.trunk(out1)
-        out2 = self.conv_block2(out)
-        out = torch.add(out1, out2)
-        out = self.upsampling(out)
-        out = self.conv_block3(out)
-
-        out = torch.clamp_(out, 0.0, 1.0)
-
-        return out
-    
-    def _initialize_weights(self) -> None:
-        for module in self.modules():
-            if isinstance(module, nn.Conv2d):
-                nn.init.kaiming_normal_(module.weight)
-                if module.bias is not None:
-                    nn.init.constant_(module.bias, 0)
-            elif isinstance(module, nn.BatchNorm2d):
-                nn.init.constant_(module.weight, 1)
+        return (F.tanh(block8) + 1) / 2
 
 
 class Discriminator(nn.Module):
-    def __init__(self) -> None:
+    def __init__(self):
         super(Discriminator, self).__init__()
-        self.features = nn.Sequential(
-            # input size. (3) x 96 x 96
-            nn.Conv2d(3, 64, (3, 3), (1, 1), (1, 1), bias=True),
-            nn.LeakyReLU(0.2, True),
-            # state size. (64) x 48 x 48
-            nn.Conv2d(64, 64, (3, 3), (2, 2), (1, 1), bias=False),
+        self.net = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=3, padding=1),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(64),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 128, (3, 3), (1, 1), (1, 1), bias=False),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2, True),
-            # state size. (128) x 24 x 24
-            nn.Conv2d(128, 128, (3, 3), (2, 2), (1, 1), bias=False),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(128, 128, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(128, 256, (3, 3), (1, 1), (1, 1), bias=False),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(128, 256, kernel_size=3, padding=1),
             nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2, True),
-            # state size. (256) x 12 x 12
-            nn.Conv2d(256, 256, (3, 3), (2, 2), (1, 1), bias=False),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(256, 256, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(256, 512, (3, 3), (1, 1), (1, 1), bias=False),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(256, 512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2, True),
-            # state size. (512) x 6 x 6
-            nn.Conv2d(512, 512, (3, 3), (2, 2), (1, 1), bias=False),
+            nn.LeakyReLU(0.2),
+
+            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2, True),
-        )
+            nn.LeakyReLU(0.2),
 
-        self.classifier = nn.Sequential(
-            nn.Linear(512 * 6 * 6, 1024),
-            nn.LeakyReLU(0.2, True),
-            nn.Linear(1024, 1),
-        )
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        out = self.features(x)
-        out = torch.flatten(out, 1)
-        out = self.classifier(out)
-
-        return outoid(self.net(x).view(batch_size))
-
-
-class ResidualConvBlock(nn.Module):
-    def __init__(self, channels):
-       super(ResidualConvBlock, self).__init__()
-       self.rcb = nn.Sequential(
-            nn.Conv2d(channels, channels, (3, 3), (1, 1), (1, 1), bias=False),
-            nn.BatchNorm2d(channels),
-            nn.PReLU(),
-            nn.Conv2d(channels, channels, (3, 3), (1, 1), (1, 1), bias=False),
-            nn.BatchNorm2d(channels),
+            nn.AdaptiveAvgPool2d(1),
+            nn.Conv2d(512, 1024, kernel_size=1),
+            nn.LeakyReLU(0.2),
+            nn.Conv2d(1024, 1, kernel_size=1)
         )
 
     def forward(self, x):
-      identity = x
-      out = self.rcb(x)
-      out = torch.add(out, identity)
-
-      return out
+        batch_size = x.size(0)
+        return F.sigmoid(self.net(x).view(batch_size))
 
 
-class UpsampleBlock(nn.Module):
-    def __init__(self, channels: int) -> None:
-        super(UpsampleBlock, self).__init__()
-        self.upsample_block = nn.Sequential(
-            nn.Conv2d(channels, channels * 4, (3, 3), (1, 1), (1, 1)),
-            nn.PixelShuffle(2),
-            nn.PReLU(),
-        )
+class ResidualBlock(nn.Module):
+    def __init__(self, channels):
+        super(ResidualBlock, self).__init__()
+        self.conv1 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(channels)
+        self.prelu = nn.PReLU()
+        self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(channels)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        out = self.upsample_block(x)
+    def forward(self, x):
+        residual = self.conv1(x)
+        residual = self.bn1(residual)
+        residual = self.prelu(residual)
+        residual = self.conv2(residual)
+        residual = self.bn2(residual)
 
-        return out
+        return x + residual
+
+
+class UpsampleBLock(nn.Module):
+    def __init__(self, in_channels, up_scale):
+        super(UpsampleBLock, self).__init__()
+        self.conv = nn.Conv2d(in_channels, in_channels * up_scale ** 2, kernel_size=3, padding=1)
+        self.pixel_shuffle = nn.PixelShuffle(up_scale)
+        self.prelu = nn.PReLU()
+
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.pixel_shuffle(x)
+        x = self.prelu(x)
+        return x
 
 def psnr(outputs, labels):
     N, _, _, _ = outputs.shape
     psnr = 0
     for i in range(N):
-        psnr += peak_signal_noise_ratio(labels[i],outputs[i])
+        psnr += compare_psnr(labels[i],outputs[i])
     return psnr / N
 
 def ssim(outputs, labels) :
@@ -167,7 +136,7 @@ def ssim(outputs, labels) :
     ssim = 0
     for i in range(N):
         
-        ssim += structural_similarity(labels[i],outputs[i], win_size=3, multichannel=True)
+        ssim += compare_ssim(labels[i],outputs[i], win_size=3, multichannel=True)
     return ssim / N
     
 
