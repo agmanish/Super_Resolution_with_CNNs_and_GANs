@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 import utils
 import model.data_loader as data_loader
-from evaluate import evaluate
+from evaluate_gan import evaluate
 import torchvision.transforms.functional as F
 from skimage import io
 from logger import Logger
