@@ -132,8 +132,9 @@ class ResidualBlock(nn.Module):
 
 
 class UpsampleBlock(nn.Module):
-    super(UpsampleBlock, self).__init__()
-    self.upsample_block = nn.Sequential(
+    def __init__(self, channels: int) -> None:
+        super(UpsampleBlock, self).__init__()
+        self.upsample_block = nn.Sequential(
             nn.Conv2d(channels, channels * 4, (3, 3), (1, 1), (1, 1)),
             nn.PixelShuffle(2),
             nn.PReLU(),
