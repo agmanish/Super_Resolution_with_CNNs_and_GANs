@@ -125,10 +125,10 @@ class ResidualBlock(nn.Module):
 
     def forward(self, x):
       identity = x
-        out = self.rcb(x)
-        out = torch.add(out, identity)
+      out = self.rcb(x)
+      out = torch.add(out, identity)
 
-        return out
+      return out
 
 
 class UpsampleBLock(nn.Module):
