@@ -246,6 +246,7 @@ if __name__ == '__main__':
     # fetch dataloaders
     dataloaders = data_loader.fetch_dataloader(['train', 'val'], args.data_dir, params)
     train_dl = dataloaders['train']
+    print(train_dl)
     val_dl = dataloaders['val']
     
     logging.info("- done.")
