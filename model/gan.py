@@ -15,7 +15,8 @@ from torchvision.models.feature_extraction import create_feature_extractor
 
 
 class Generator(nn.Module):
-    def __init__(self) -> None:
+    def __init__(self, scale_factor) -> None:
+        upsample_block_num = int(math.log(scale_factor, 2))
         super(Generator, self).__init__()
         # First conv layer.
         self.conv_block1 = nn.Sequential(
@@ -25,7 +26,7 @@ class Generator(nn.Module):
 
         # Features trunk blocks.
         trunk = []
-        for _ in range(16):
+        for _ in range(upsample_block_num):
             trunk.append(ResidualConvBlock(64))
         self.trunk = nn.Sequential(*trunk)
 
