@@ -113,7 +113,7 @@ class Discriminator(nn.Module):
         return outoid(self.net(x).view(batch_size))
 
 
-class ResidualBlock(nn.Module):
+class ResidualConvBlock(nn.Module):
     def __init__(self, channels):
        super(ResidualConvBlock, self).__init__()
        self.rcb = nn.Sequential(
