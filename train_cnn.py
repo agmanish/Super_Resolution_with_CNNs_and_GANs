@@ -138,7 +138,8 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
     '''
     logger = Logger('./logs')
     scheduler = lr_scheduler.StepLR(optimizer, step_size = 10, gamma=1)
-    repo = git.Repo(.)
+    repo = Repo(self.rorepo.working_tree_dir)
+    assert not repo.bare
 
     for epoch in range(params.num_epochs):
         # Run one epoch
