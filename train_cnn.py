@@ -154,7 +154,7 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
             print('Some error occured while pushing the code')    
 
     
-        for epoch in range(params.num_epochs):
+     for epoch in range(params.num_epochs):
         # Run one epoch
 #         scheduler.step()
         git_push()
