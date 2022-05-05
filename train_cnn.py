@@ -138,9 +138,8 @@ def train_and_evaluate(model, train_dataloader, val_dataloader, optimizer, loss_
     '''
     logger = Logger('./logs')
     scheduler = lr_scheduler.StepLR(optimizer, step_size = 10, gamma=1)
-    repo = Repo(os.getcwd())
-    assert not repo.bare
-    PATH_OF_GIT_REPO = getcwd()  # make sure .git folder is properly configured
+    
+    PATH_OF_GIT_REPO = os.getcwd()  # make sure .git folder is properly configured
     COMMIT_MESSAGE = 'srcnn_git'
 
     def git_push():
