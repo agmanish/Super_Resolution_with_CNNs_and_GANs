@@ -1,0 +1,14 @@
+2022-05-06 04:37:35,821:INFO: Creating the dataset...
+2022-05-06 04:37:35,827:INFO: - done.
+2022-05-06 04:37:38,107:INFO: Starting evaluation
+2022-05-06 04:38:27,924:INFO: - Eval metrics : PSNR: 24.304 ; SSIM: 0.832 ; loss: 311.330
+2022-05-06 04:58:05,620:INFO: Creating the dataset...
+2022-05-06 04:58:05,625:INFO: - done.
+2022-05-06 04:58:07,950:INFO: Starting evaluation
+2022-05-06 04:59:51,993:INFO: Creating the dataset...
+2022-05-06 04:59:51,997:INFO: - done.
+2022-05-06 04:59:54,269:INFO: Starting evaluation
+2022-05-06 05:00:41,804:INFO: Creating the dataset...
+2022-05-06 05:00:41,808:INFO: - done.
+2022-05-06 05:00:44,111:INFO: Starting evaluation
+2022-05-06 05:00:47,688:INFO: - Eval metrics : PSNR: 24.304 ; SSIM: 0.832 ; loss: 311.330

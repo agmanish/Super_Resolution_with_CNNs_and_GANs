@@ -11,7 +11,7 @@ import torchvision.transforms.functional as F
 # and http://pytorch.org/tutorials/beginner/data_loading_tutorial.html
 # define a training image loader that specifies transforms on images. See documentation for more details.
 
-'''
+
 train_transformer = transforms.Compose([
     transforms.Resize(64),  # resize the image to 64x64 (remove if images are already 64x64)
     transforms.RandomHorizontalFlip(),  # randomly flip image horizontally
@@ -21,7 +21,7 @@ train_transformer = transforms.Compose([
 eval_transformer = transforms.Compose([
     transforms.Resize(64),  # resize the image to 64x64 (remove if images are already 64x64)
     transforms.ToTensor()])  # transform it into a torch tensor
-'''
+
 
 train_transformer = transforms.Compose([transforms.ToTensor()])
 eval_transformer = transforms.Compose([transforms.ToTensor()])
@@ -66,7 +66,7 @@ class FACESDataset(Dataset):
         # At this step everything is ok
         label_image = Image.open(self.filenames[idx])  # PIL image, label
         train_image = Image.open(self.blur_filenames[idx])  # train
-
+            
         label_image = self.transform(label_image)  # label
         train_image = self.transform(train_image)  # train
   
