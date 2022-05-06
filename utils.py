@@ -102,7 +102,7 @@ def save_dict_to_json(d, json_path):
         json.dump(d, f, indent=4)
 
 
-def save_checkpoint(state, is_best, checkpoint,flag):
+def save_checkpoint(state, is_best, checkpoint,flag=''):
     """Saves model and training parameters at checkpoint + 'last.pth.tar'. If is_best==True, also saves
     checkpoint + 'best.pth.tar'
 
@@ -111,7 +111,7 @@ def save_checkpoint(state, is_best, checkpoint,flag):
         is_best: (bool) True if it is the best model seen till now
         checkpoint: (string) folder where parameters are to be saved
     """
-    filepath = os.path.join(checkpoint+'/'+flag, 'last.pth.tar')
+    filepath = os.path.join(checkpoint, flag+'last.pth.tar')
     if not os.path.exists(checkpoint):
         print("Checkpoint Directory does not exist! Making directory {}".format(checkpoint))
         os.mkdir(checkpoint)
