@@ -197,3 +197,5 @@
 2022-05-06 04:24:56,191:INFO: Epoch 20/20
 2022-05-06 04:25:07,509:INFO: - Train metrics: PSNR: 25.813 ; SSIM: 0.841 ; loss: 233.800
 2022-05-06 04:25:11,094:INFO: - Eval metrics : PSNR: 25.485 ; SSIM: 0.840 ; loss: 228.265
+2022-05-06 08:06:05,531:INFO: Loading the datasets...
+2022-05-06 08:06:05,560:INFO: - done.

@@ -50,3 +50,9 @@
 2018-05-31 22:53:15,241:INFO: - Eval metrics : PSNR: 26.015 ; SSIM: 0.919 ; mse_loss: 180.726
 2022-05-06 04:36:35,501:INFO: Creating the dataset...
 2022-05-06 04:36:35,508:INFO: - done.
+2022-05-06 07:54:49,231:INFO: Creating the dataset...
+2022-05-06 07:54:49,235:INFO: - done.
+2022-05-06 07:54:54,390:INFO: Starting evaluation
+2022-05-06 07:58:17,007:INFO: Creating the dataset...
+2022-05-06 07:58:17,011:INFO: - done.
+2022-05-06 07:58:22,178:INFO: Starting evaluation
