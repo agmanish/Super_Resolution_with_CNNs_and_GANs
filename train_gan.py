@@ -91,13 +91,14 @@ def train(netG, netD, optimG, optimD, loss_fn, dataloader, metrics, params, cuda
             netG.zero_grad()
 #             print("real_img", real_img)
             g_loss = loss_fn(fake_out, fake_img, real_img)
-            g_loss.backward()
-            optimG.step()
+            
             fake_img = netG(train_batch)
             fake_out = netD(fake_img).mean()
 
             
             g_loss = loss_fn(fake_out, fake_img, real_img)
+            g_loss.backward()
+            optimG.step()
             d_loss = 1 - real_out + fake_out
             N, C, H, W = real_img.shape
             mse_loss = torch.sum((real_img * 255 - fake_img * 255) ** 2) / N / C / H / W  # each photo, each channel
