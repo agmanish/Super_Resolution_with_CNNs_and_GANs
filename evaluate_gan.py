@@ -175,8 +175,8 @@ if __name__ == '__main__':
     logging.info("Starting evaluation")
 
     # Reload weights from the saved file
-    restore_path_g = os.path.join(args.model_dir, 'best_g' + '.pth.tar')
-    restore_path_d = os.path.join(args.model_dir, 'best_d' + '.pth.tar')
+    restore_path_g = os.path.join(args.model_dir, 'Gbest' + '.pth.tar')
+    restore_path_d = os.path.join(args.model_dir, 'Dbest' + '.pth.tar')
     utils.load_checkpoint(restore_path_g, netG)
     utils.load_checkpoint(restore_path_d, netD)
 #     utils.load_checkpoint(os.path.join(args.model_dir, args.restore_file + '.pth.tar'), model)
