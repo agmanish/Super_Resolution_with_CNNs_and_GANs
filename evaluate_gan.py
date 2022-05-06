@@ -86,7 +86,7 @@ def evaluate(netG, netD, loss_fn, dataloader, metrics, params, cuda_id):
         
         N, C, H, W = output_batch.shape
         mse_loss = torch.sum((output_batch * 255 - labels_batch * 255) ** 2) / N / C / H / W  # each photo, each channel
-    
+        print (mse_loss.data)
         # extract data from torch Variable, move to cpu, convert to numpy arrays
         output_batch = output_batch.data.cpu().numpy()
        
