@@ -209,3 +209,7 @@
 2022-05-06 07:50:05,676:INFO: - done.
 2022-05-06 07:50:11,304:INFO: Starting training for 20 epoch(s)
 2022-05-06 07:50:11,304:INFO: Epoch 1/20
+2022-05-06 07:51:05,311:INFO: Loading the datasets...
+2022-05-06 07:51:05,342:INFO: - done.
+2022-05-06 07:51:10,979:INFO: Starting training for 20 epoch(s)
+2022-05-06 07:51:10,979:INFO: Epoch 1/20
