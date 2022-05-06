@@ -77,6 +77,7 @@ class GeneratorLoss(nn.Module):
 
     def forward(self, out_labels, out_images, target_images):
         # Adversarial Loss
+        torch.autograd.set_detect_anomaly(True)
         adversarial_loss = torch.mean(1 - out_labels)
         # Perception Loss
         perception_loss = self.mse_loss(self.loss_network(out_images), self.loss_network(target_images))
