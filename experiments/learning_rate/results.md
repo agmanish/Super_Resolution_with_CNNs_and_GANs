@@ -1,7 +1,7 @@
 |                                                |    PSNR |     SSIM |    loss |
 |:-----------------------------------------------|--------:|---------:|--------:|
-| experiments/learning_rate/learning_rate_1e-05  | 20.5376 | 0.809991 | 633.996 |
-| experiments/learning_rate/learning_rate_0.001  | 25.6974 | 0.84006  | 220.522 |
-| experiments/learning_rate/learning_rate_0.0005 | 26.344  | 0.842376 | 206.695 |
-| experiments/learning_rate/learning_rate_0.0001 | 24.8274 | 0.82581  | 264.311 |
+| experiments/learning_rate/learning_rate_0.001  | 27.9161 | 0.840164 | 172.802 |
 | experiments/learning_rate/learning_rate_0.01   | 25.0978 | 0.903672 | 220.937 |
+| experiments/learning_rate/learning_rate_0.0001 | 27.9121 | 0.840146 | 173.284 |
+| experiments/learning_rate/learning_rate_1e-05  | 20.5376 | 0.809991 | 633.996 |
+| experiments/learning_rate/learning_rate_0.0005 | 27.9541 | 0.840823 | 171.085 |
