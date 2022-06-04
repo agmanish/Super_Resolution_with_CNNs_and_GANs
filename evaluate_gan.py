@@ -39,6 +39,7 @@ model_directory = {'des_size': Densenet_size, 'densenet_shallow': Densenet_shall
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='../data/4_3_test', help="Directory containing the dataset")
+parser.add_argument('--op_dir', default='../data/4_3_test', help="Directory containing the dataset")
 parser.add_argument('--model_dir', default='experiments/base_model', help="Directory containing params.json")
 parser.add_argument('--model', default=None)
 parser.add_argument('--cuda', default=None)
@@ -74,14 +75,14 @@ def evaluate(netG, netD, loss_fn, dataloader, metrics, params, cuda_id):
         # compute model output
         output_batch = netG(data_batch)
         
-#         output_batch_tensor = output_batch.data.cpu()
-#         for i in output_batch_tensor:
-#             #i /= np.max(i) * 2
-#             #io.imsave(os.path.join('data/results/', '%d-evaluate-result.jpg' %count), i.reshape(128,128,3))
-#             i = torch.clamp(i,0.0,1.0)
-#             image = F.to_pil_image(i)
-#             image.save("experiments/gan_ssim_model/test_results/" + "%d-evaluate-result.jpg" %count)
-#             count += 1
+        output_batch_tensor = output_batch.data.cpu()
+        for i in output_batch_tensor:
+            #i /= np.max(i) * 2
+            #io.imsave(os.path.join('data/results/', '%d-evaluate-result.jpg' %count), i.reshape(128,128,3))
+            i = torch.clamp(i,0.0,1.0)
+            image = F.to_pil_image(i)
+            image.save(opt.op_dir + "%d-evaluate-result.jpg" %count)
+            count += 1
          
         
         N, C, H, W = output_batch.shape
