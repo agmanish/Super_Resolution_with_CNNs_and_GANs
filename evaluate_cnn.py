@@ -46,6 +46,7 @@ model_directory = {'des_size': Densenet_size, 'densenet_shallow': Densenet_shall
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='../data/4_3', help="Directory containing the dataset")
+parser.add_argument('--op_dir', default='../data/4_3', help="Directory containing the dataset")
 parser.add_argument('--model_dir', default='experiments/base_model', help="Directory containing params.json")
 #parser.add_argument('--output_path',help="Image output path")
 parser.add_argument('--model', default='densenet')
@@ -81,11 +82,11 @@ def evaluate(model, loss_fn, dataloader, metrics, params, cuda_id):
         
         output_batch_tensor = output_batch.data.cpu()
         for i in output_batch_tensor:
-          i /= np.max(i) * 2
-          io.imsave(os.path.join(args.output_path,'imsave', '%d-evaluate-result.jpg' %count), i.reshape(200,200,3))
+          #i /= np.max(i) * 2
+          #io.imsave(os.path.join(args.output_path,'imsave', '%d-evaluate-result.jpg' %count), i.reshape(200,200,3))
           i = torch.clamp(i,0.0,1.0)
           image = F.to_pil_image(i)
-          image.save(os.path.join(args.output_path,'image_save', "%d-evaluate-result.jpg" %count))
+          image.save(os.path.join(opt.op_path, "%d-evaluate-result.jpg" %count))
           count += 1
          
         loss = loss_fn(output_batch, labels_batch)
