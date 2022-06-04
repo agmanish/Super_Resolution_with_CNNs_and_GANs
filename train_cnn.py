@@ -10,7 +10,6 @@ import torch
 import torch.optim as optim
 from torch.autograd import Variable
 from tqdm import tqdm
-from git import Repo
 
 import utils
 from torch.nn.utils import clip_grad_norm
