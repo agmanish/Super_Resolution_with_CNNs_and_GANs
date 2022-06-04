@@ -100,3 +100,4 @@ metrics = {
     'PSNR': accuracy,
     'SSIM': ssim,
     # could add more metrics such as accuracy for each token type
+    )
