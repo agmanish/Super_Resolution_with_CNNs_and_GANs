@@ -49,6 +49,7 @@ model_directory = {'des_size': Densenet_size, 'densenet_shallow': Densenet_shall
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='../data/cnn_faces', help="Directory containing the dataset")
+parser.add_argument('--op_dir', default='../data/cnn_faces', help="Directory containing the dataset")
 parser.add_argument('--model_dir', default='experiments/base_model', help="Directory containing params.json")
 parser.add_argument('--model', default=None)
 parser.add_argument('--cuda', default=None)
