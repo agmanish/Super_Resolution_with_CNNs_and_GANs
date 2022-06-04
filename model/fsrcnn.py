@@ -3,9 +3,12 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from model.base_networks import *
+import skimage as sk
 import math
+
 import pytorch_ssim as ps
 from torch.autograd import Variable
+from skimage.measure import compare_psnr, compare_ssim
 
 class Net(nn.Module):
 
@@ -56,30 +59,40 @@ def loss_fn(outputs, labels):
     # average loss on each pixel(0-255)
     return mse_loss
 
-
 def accuracy(outputs, labels):
-    N, C, H, W = outputs.shape
-    
-    nume = np.max(outputs, axis = (1, 2, 3), keepdims = True)  #(N,)
-    deno = np.sum((outputs.reshape(-1,3,144,144) - labels.reshape(-1,3,144,144))**2, axis = (1, 2, 3), keepdims = True) / C
-    deno *=  255 * 255 / H / W   # (N,)  range from 0-255, pixel avg
-    
-    psnr = (nume * 255) ** 2 / deno # (N,)
-    psnr = np.log(psnr)
-    psnr = 10 * np.sum(psnr) 
-    psnr /= math.log(10) * N
-    
-    return psnr
+    N, _, _, _ = outputs.shape
+    psnr = 0
+    for i in range(N):
+        psnr += compare_psnr(labels[i],outputs[i])
+    return psnr / N
 
+#     N, C, H, W = outputs.shape
+    
+#     nume = np.max(outputs, axis = (1, 2, 3), keepdims = True)  #(N,)
+#     deno = np.sum((outputs.reshape(-1,3,144,144) - labels.reshape(-1,3,144,144))**2, axis = (1, 2, 3), keepdims = True) / C
+#     deno *=  255 * 255 / H / W   # (N,)  range from 0-255, pixel avg
+    
+#     psnr = (nume * 255) ** 2 / deno # (N,)
+#     psnr = np.log(psnr)
+#     psnr = 10 * np.sum(psnr)
+#     psnr /= math.log(10) * N
+
+#     return psnr
 
 def ssim(outputs, labels) :
-    if torch.cuda.is_available():
-        outputs = Variable( torch.from_numpy(outputs)).cuda()
-        labels = Variable( torch.from_numpy(labels)).cuda()
+    N, _, _, _ = outputs.shape
+    ssim = 0
+    for i in range(N):
+        
+        ssim += compare_ssim(labels[i],outputs[i], win_size=3, multichannel=True)
+    return ssim / N
     
-    ssim = ps.ssim(outputs, labels)
-    
-    return ssim
+#     if torch.cuda.is_available():
+#         outputs = Variable( torch.from_numpy(outputs)).cuda()
+#         labels = Variable( torch.from_numpy(labels)).cuda()
+
+#     ssim = ps.ssim(outputs, labels)
+#     return ssim
     
 
 # maintain all metrics required in this dictionary- these are used in the training and evaluation loops
