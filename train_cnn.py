@@ -3,6 +3,7 @@
 import argparse
 import logging
 import os
+import time
 
 import numpy as np
 import torch
@@ -62,7 +63,7 @@ opt = parser.parse_args()
 net = model_directory[opt.model]
 
 global_loss = []
-
+start_time = time.time()
 
 def train(model, optimizer, loss_fn, dataloader, metrics, params, logger, epoch, cuda_id):
 
@@ -250,4 +251,4 @@ if __name__ == '__main__':
                        args.restore_file, cuda_id=cuda_id)
 
     print("finish training and evaluating!")
-    
+    print("--- %s seconds ---" % (time.time() - start_time))
